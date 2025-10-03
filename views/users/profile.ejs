@@ -1,0 +1,39 @@
+ 
+
+<div class="container py-4">
+  <div class="row g-4">
+    <div class="col-lg-4" data-aos="fade-right">
+      <div class="border rounded-3 p-3 text-center shadow-sm">
+        <i class="bi bi-person-circle display-4 d-block mb-2"></i>
+        <h2 class="h5 mb-1"><%= user.username %></h2>
+        <p class="text-muted mb-0"><%= user.email %></p>
+      </div>
+    </div>
+    <div class="col-lg-8" data-aos="fade-left">
+      <div class="border rounded-3 p-3 shadow-sm">
+        <h3 class="h6 mb-3">Your recent bookings</h3>
+        <div class="vstack gap-3">
+          <% (bookings || []).forEach(function(booking){ %>
+            <div class="d-flex gap-3 align-items-center border rounded-3 p-3">
+              <img src="<%= booking.listing.coverImage || '/images/placeholder-room.jpg' %>" alt="<%= booking.listing.title %>" class="rounded object-fit-cover" style="width: 88px; height: 66px;">
+              <div class="flex-grow-1">
+                <div class="fw-semibold"><%= booking.listing.title %></div>
+                <div class="text-muted small"><i class="bi bi-calendar me-1"></i><%= booking.checkIn %> to <%= booking.checkOut %></div>
+              </div>
+              <a href="/bookings/<%= booking._id %>" class="btn btn-outline-primary btn-sm" data-aos="zoom-in"><i class="bi bi-eye me-1"></i>View</a>
+            </div>
+          <% }) %>
+          <% if (!bookings || bookings.length === 0) { %>
+            <div class="text-muted text-center py-4">
+              <i class="bi bi-inboxes fs-1 d-block mb-2"></i>
+              <p>No bookings yet.</p>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+ 
+

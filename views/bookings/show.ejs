@@ -1,0 +1,64 @@
+ 
+
+<div class="container py-4">
+  <div class="row g-4">
+    <div class="col-lg-7" data-aos="fade-right">
+      <div class="border rounded-3 p-3 shadow-sm">
+        <div class="d-flex gap-3 align-items-center">
+          <img src="<%= booking.listing.coverImage || '/images/placeholder-room.jpg' %>" alt="<%= booking.listing.title %>" class="rounded object-fit-cover" style="width: 140px; height: 105px;">
+          <div>
+            <h1 class="h5 mb-1"><%= booking.listing.title %></h1>
+            <div class="text-muted"><i class="bi bi-geo-alt me-1"></i><%= booking.listing.location %></div>
+          </div>
+        </div>
+        <hr>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="border rounded-3 p-3 h-100">
+              <div class="text-muted small">Check-in</div>
+              <div class="fw-semibold"><%= booking.checkIn %></div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="border rounded-3 p-3 h-100">
+              <div class="text-muted small">Check-out</div>
+              <div class="fw-semibold"><%= booking.checkOut %></div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="border rounded-3 p-3 h-100">
+              <div class="text-muted small">Guests</div>
+              <div class="fw-semibold"><%= booking.guests %></div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-3 d-flex justify-content-between align-items-center">
+          <div class="fw-semibold">Total: $<%= booking.totalPrice %></div>
+          <% if (canCancel) { %>
+            <form action="/bookings/<%= booking._id %>?_method=DELETE" method="post">
+              <button class="btn btn-outline-danger" type="submit"><i class="bi bi-x-circle me-1"></i>Cancel booking</button>
+            </form>
+          <% } %>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <% if (canReview) { %>
+          <a href="/listings/<%= booking.listing._id %>/reviews/new" class="btn btn-primary" data-aos="zoom-in"><i class="bi bi-chat-dots me-2"></i>Write a review</a>
+        <% } %>
+      </div>
+    </div>
+
+    <div class="col-lg-5" data-aos="fade-left">
+      <div class="border rounded-3 p-3 shadow-sm">
+        <h2 class="h6">Booking details</h2>
+        <div class="small text-muted">Booking ID: <%= booking._id %></div>
+        <div class="small text-muted">Status: <%= booking.status || 'confirmed' %></div>
+        <div class="small text-muted">Booked on: <%= booking.createdAt %></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+ 
+

@@ -1,0 +1,62 @@
+ 
+
+<div class="container py-5" style="max-width: 540px;">
+  <h1 class="h4 mb-3 text-center" data-aos="fade-down">Create your account</h1>
+  <div id="signupError" class="alert alert-danger d-none"></div>
+  <form id="signupForm" action="#" method="post" class="vstack gap-3" data-aos="fade-up">
+    <div>
+      <label class="form-label">Username</label>
+      <input type="text" name="username" class="form-control" value="<%= (typeof form !== 'undefined' && form.username) ? form.username : '' %>" required>
+    </div>
+    <div>
+      <label class="form-label">Email</label>
+      <input type="email" name="email" class="form-control" value="<%= (typeof form !== 'undefined' && form.email) ? form.email : '' %>" required>
+    </div>
+    <div>
+      <label class="form-label">Password</label>
+      <input type="password" name="password" class="form-control" required>
+    </div>
+    <button class="btn btn-primary w-100" type="submit" data-aos="zoom-in"><i class="bi bi-person-plus me-2"></i>Sign up</button>
+  </form>
+  <p class="text-center mt-3 text-muted">Already have an account? <a href="/users/login">Log in</a></p>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('signupForm');
+  const errorEl = document.getElementById('signupError');
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    errorEl.classList.add('d-none');
+    const formData = new FormData(form);
+    const payload = {
+      username: formData.get('username'),
+      email: formData.get('email'),
+      password: formData.get('password')
+    };
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.success) {
+        const msg = (data && (data.error || (data.details && data.details[0] && data.details[0].msg))) || 'Signup failed';
+        errorEl.textContent = msg;
+        errorEl.classList.remove('d-none');
+        return;
+      }
+      if (data.token) {
+        try { localStorage.setItem('token', data.token); } catch (_) {}
+      }
+      window.location.href = '/';
+    } catch (err) {
+      errorEl.textContent = 'Network error. Please try again.';
+      errorEl.classList.remove('d-none');
+    }
+  });
+});
+</script>
+
+

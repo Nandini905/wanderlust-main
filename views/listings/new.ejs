@@ -1,0 +1,38 @@
+ 
+
+<div class="container py-4">
+  <h1 class="h4 mb-3" data-aos="fade-down">Create a new listing</h1>
+  <form action="/listings" method="post" enctype="multipart/form-data" class="row g-3" data-aos="fade-up">
+    <div class="col-md-6">
+      <label class="form-label">Title</label>
+      <input type="text" name="title" class="form-control" value="<%= (form && form.title) || '' %>" required>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Location</label>
+      <input type="text" name="location" class="form-control" value="<%= (form && form.location) || '' %>" required>
+    </div>
+    <div class="col-12">
+      <label class="form-label">Description</label>
+      <textarea name="description" rows="5" class="form-control" required><%= (form && form.description) || '' %></textarea>
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Price per night ($)</label>
+      <input type="number" name="pricePerNight" min="0" step="1" class="form-control" value="<%= (form && form.pricePerNight) || '' %>" required>
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Max guests</label>
+      <input type="number" name="maxGuests" min="1" step="1" class="form-control" value="<%= (form && form.maxGuests) || '' %>">
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Cover image</label>
+      <input type="file" name="cover" accept="image/*" class="form-control">
+    </div>
+    <div class="col-12 d-flex gap-2">
+      <button class="btn btn-primary" type="submit" data-aos="zoom-in"><i class="bi bi-save2 me-2"></i>Create</button>
+      <a class="btn btn-outline-secondary" href="/listings"><i class="bi bi-arrow-left me-2"></i>Back</a>
+    </div>
+  </form>
+</div>
+
+ 
+

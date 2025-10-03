@@ -1,0 +1,103 @@
+ 
+
+<div class="container py-8">
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-8">
+    <div>
+      <h1 class="text-3xl font-bold">All listings</h1>
+      <p class="text-muted mt-2">Discover amazing places to stay</p>
+    </div>
+    <% if (user) { %>
+      <a href="/listings/new" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i>
+        New listing
+      </a>
+    <% } %>
+  </div>
+
+  <!-- Categories Horizontal Scroll + Filters -->
+  <div class="flex items-center justify-between gap-3 mb-4">
+    <div class="categories-scroll flex-1">
+      <button class="category-chip active"><i class="bi bi-stars"></i>Trending</button>
+      <button class="category-chip"><i class="bi bi-water"></i>Beachfront</button>
+      <button class="category-chip"><i class="bi bi-tree"></i>Cabins</button>
+      <button class="category-chip"><i class="bi bi-building"></i>City</button>
+      <button class="category-chip"><i class="bi bi-sun"></i>Design</button>
+      <button class="category-chip"><i class="bi bi-binoculars"></i>Views</button>
+      <button class="category-chip"><i class="bi bi-houses"></i>Villas</button>
+      <button class="category-chip"><i class="bi bi-fire"></i>Trending</button>
+      <button class="category-chip"><i class="bi bi-geo"></i>National parks</button>
+      <button class="category-chip"><i class="bi bi-cloud-sun"></i>Camping</button>
+    </div>
+    <button class="btn btn-outline btn-sm"><i class="bi bi-sliders"></i> Filters</button>
+  </div>
+
+  <!-- Listings Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <% (listings || []).forEach(function(listing, idx){ %>
+      <div class="card fade-in" style="animation-delay: <%= (idx * 100) %>ms">
+        <a href="/listings/<%= listing._id %>" class="block">
+          <div class="relative">
+            <img 
+              src="<%= listing.coverImage || '/images/placeholder-room.jpg' %>" 
+              alt="<%= listing.title %>" 
+              class="card-img-top"
+            >
+            <button class="absolute top-3 right-3 p-2 bg-white rounded-full shadow-md hover:shadow-lg transition-shadow">
+              <i class="bi bi-heart text-lg"></i>
+            </button>
+            <div class="absolute bottom-3 left-3">
+              <span class="badge bg-white text-dark">
+                <i class="bi bi-star-fill star"></i>
+                <%= (listing.rating || 4.8).toFixed(1) %>
+              </span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="flex items-start justify-between mb-2">
+              <h3 class="card-title"><%= listing.title %></h3>
+            </div>
+            <p class="card-text mb-2">
+              <i class="bi bi-geo-alt"></i>
+              <%= listing.location %>
+            </p>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-1">
+                <span class="font-bold text-lg">$<%= listing.pricePerNight %></span>
+                <span class="text-muted">night</span>
+              </div>
+              <div class="text-sm text-muted">
+                <i class="bi bi-calendar"></i>
+                Available
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    <% }) %>
+  </div>
+
+  <!-- Empty State -->
+  <% if (!listings || listings.length === 0) { %>
+    <div class="text-center py-16">
+      <i class="bi bi-house text-6xl text-muted mb-4"></i>
+      <h3 class="text-xl font-semibold mb-2">No listings found</h3>
+      <p class="text-muted mb-6">Try adjusting your search or filters</p>
+      <a href="/listings" class="btn btn-primary">
+        <i class="bi bi-arrow-clockwise"></i>
+        Reset filters
+      </a>
+    </div>
+  <% } %>
+
+  <!-- Load More -->
+  <div class="text-center mt-12">
+    <button class="btn btn-outline btn-lg">
+      <i class="bi bi-arrow-down"></i>
+      Load more listings
+    </button>
+  </div>
+</div>
+
+ 
+

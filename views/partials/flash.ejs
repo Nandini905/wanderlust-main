@@ -1,0 +1,26 @@
+<div class="container mt-3">
+  <% if (typeof success !== 'undefined' && success) { %>
+    <div class="alert alert-success d-flex align-items-center shadow-sm" role="alert" data-aos="fade-down">
+      <i class="bi bi-check-circle-fill me-2"></i>
+      <div><%= success %></div>
+    </div>
+  <% } %>
+  <% if (typeof error !== 'undefined' && error) { %>
+    <div class="alert alert-danger d-flex align-items-center shadow-sm" role="alert" data-aos="fade-down">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      <div><%= error %></div>
+    </div>
+  <% } %>
+  <% if (typeof info !== 'undefined' && info) { %>
+    <div class="alert alert-info d-flex align-items-center shadow-sm" role="alert" data-aos="fade-down">
+      <i class="bi bi-info-circle-fill me-2"></i>
+      <div><%= info %></div>
+    </div>
+  <% } %>
+  <% if (Array.isArray(messages)) { %>
+    <% messages.forEach(function(msg){ %>
+      <div class="alert alert-secondary shadow-sm" role="alert" data-aos="fade-down"><%= msg %></div>
+    <% }) %>
+  <% } %>
+</div>
+

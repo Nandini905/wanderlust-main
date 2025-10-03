@@ -1,0 +1,41 @@
+ 
+
+<div class="container py-4">
+  <h1 class="h4 mb-3" data-aos="fade-down">Edit listing</h1>
+  <form action="/listings/<%= listing._id %>?_method=PUT" method="post" enctype="multipart/form-data" class="row g-3" data-aos="fade-up">
+    <div class="col-md-6">
+      <label class="form-label">Title</label>
+      <input type="text" name="title" class="form-control" value="<%= listing.title %>" required>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Location</label>
+      <input type="text" name="location" class="form-control" value="<%= listing.location %>" required>
+    </div>
+    <div class="col-12">
+      <label class="form-label">Description</label>
+      <textarea name="description" rows="5" class="form-control" required><%= listing.description %></textarea>
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Price per night ($)</label>
+      <input type="number" name="pricePerNight" min="0" step="1" class="form-control" value="<%= listing.pricePerNight %>" required>
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Max guests</label>
+      <input type="number" name="maxGuests" min="1" step="1" class="form-control" value="<%= listing.maxGuests %>">
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Replace cover image</label>
+      <input type="file" name="cover" accept="image/*" class="form-control">
+      <% if (listing.coverImage) { %>
+        <div class="small text-muted mt-1">Current: <%= listing.coverImage %></div>
+      <% } %>
+    </div>
+    <div class="col-12 d-flex gap-2">
+      <button class="btn btn-primary" type="submit" data-aos="zoom-in"><i class="bi bi-save2 me-2"></i>Save changes</button>
+      <a class="btn btn-outline-secondary" href="/listings/<%= listing._id %>"><i class="bi bi-arrow-left me-2"></i>Back</a>
+    </div>
+  </form>
+</div>
+
+ 
+
