@@ -34,21 +34,25 @@
           <div class="h4 m-0">$<%= listing.pricePerNight %> <small class="text-muted fs-6">night</small></div>
           <div class="text-warning"><i class="bi bi-star-fill"></i> <%= listing.rating || 4.8 %></div>
         </div>
-        <form action="/bookings" method="post" class="vstack gap-2">
-          <input type="hidden" name="listingId" value="<%= listing._id %>">
+        <form id="bookingForm" class="vstack gap-2">
+          <input type="hidden" id="listingId" value="<%= listing._id %>">
           <div class="row g-2">
             <div class="col-6">
               <label class="form-label">Check-in</label>
-              <input type="date" name="checkIn" class="form-control" required>
+              <input type="date" id="checkIn" class="form-control" required>
             </div>
             <div class="col-6">
               <label class="form-label">Check-out</label>
-              <input type="date" name="checkOut" class="form-control" required>
+              <input type="date" id="checkOut" class="form-control" required>
             </div>
           </div>
           <div>
             <label class="form-label">Guests</label>
-            <input type="number" min="1" name="guests" class="form-control" value="1" required>
+            <input type="number" min="1" id="guests" class="form-control" value="1" required>
+          </div>
+          <div class="d-flex justify-content-between small text-muted">
+            <span id="nightsLabel">Select dates</span>
+            <span id="totalLabel"></span>
           </div>
           <button class="btn btn-primary w-100" type="submit" data-aos="zoom-in"><i class="bi bi-calendar-check me-2"></i>Reserve</button>
           <% if (user && user._id && String(user._id) === String(listing.owner._id)) { %>
@@ -60,6 +64,66 @@
             </div>
           <% } %>
         </form>
+        <script>
+          (function(){
+            const pricePerNight = Number(<%= listing.pricePerNight %>);
+            const checkInEl = document.getElementById('checkIn');
+            const checkOutEl = document.getElementById('checkOut');
+            const totalLabel = document.getElementById('totalLabel');
+            const nightsLabel = document.getElementById('nightsLabel');
+            const form = document.getElementById('bookingForm');
+
+            function calcNights(){
+              const ci = new Date(checkInEl.value);
+              const co = new Date(checkOutEl.value);
+              if (!checkInEl.value || !checkOutEl.value) return 0;
+              const ms = co - ci;
+              const nights = Math.max(0, Math.ceil(ms / (1000*60*60*24)));
+              return nights;
+            }
+
+            function updateTotals(){
+              const nights = calcNights();
+              if (nights > 0){
+                nightsLabel.textContent = nights + ' night' + (nights>1?'s':'');
+                const total = pricePerNight * nights;
+                totalLabel.textContent = 'Total: $' + total.toFixed(2);
+              } else {
+                nightsLabel.textContent = 'Select dates';
+                totalLabel.textContent = '';
+              }
+            }
+
+            checkInEl.addEventListener('change', updateTotals);
+            checkOutEl.addEventListener('change', updateTotals);
+
+            form.addEventListener('submit', async function(e){
+              e.preventDefault();
+              const listingId = document.getElementById('listingId').value;
+              const guests = document.getElementById('guests').value;
+              const payload = {
+                userId: '<%= (user && user._id) ? String(user._id) : '' %>',
+                propertyId: listingId,
+                checkIn: checkInEl.value,
+                checkOut: checkOutEl.value,
+                guests
+              };
+              try {
+                const res = await fetch('/api/bookings', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Failed to create booking');
+                alert('Booking created! Total: $' + (data.totalPrice || ''));
+                window.location.href = '/bookings/' + data.bookingId;
+              } catch (err){
+                alert(err.message);
+              }
+            });
+          })();
+        </script>
       </div>
     </div>
   </div>
